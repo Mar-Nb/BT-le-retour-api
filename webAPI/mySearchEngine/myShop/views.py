@@ -9,6 +9,8 @@ from myShop.serializers import TransactionProduitSerializer
 
 from mytig.models import ProduitEnPromotion
 
+from django.db.models.functions import ExtractYear
+
 # Create your views here.
 class RedirectionInfosProduit(APIView):
     """ /infoproduct/int:id/ """
@@ -137,4 +139,64 @@ class RedirectionAjoutTransaction(APIView):
             return Response({"message": "price doit être un flottant"})
 
         serializer = TransactionProduitSerializer(transac)
+        return Response(serializer.data)
+
+class RedirectionTransactionAnnee(APIView):
+    """ /transaction/getannee/int:annee/ """
+
+    def get_object(self, annee):
+        try:
+            return TransactionProduit.objects.filter(
+                date__year = annee, type = "vente")
+        except TransactionProduit.DoesNotExist:
+            raise Http404
+
+    def get(self, request, annee, format = None):
+        transac = self.get_object(annee)
+        serializer = TransactionProduitSerializer(transac, many = True)
+        return Response(serializer.data)
+
+class RedirectionTransactionTrimestre(APIView):
+    """ /transaction/gettrimestre/int:annee/int:trimestre/ """
+
+    def get_object(self, annee, trimestre):
+        try:
+            return TransactionProduit.objects.filter(
+                date__year = annee, date__quarter = trimestre, type = "vente")
+        except TransactionProduit.DoesNotExist:
+            raise Http404
+
+    def get(self, request, annee, trimestre, format = None):
+        transac = self.get_object(annee, trimestre)
+        serializer = TransactionProduitSerializer(transac, many = True)
+        return Response(serializer.data)
+
+class RedirectionTransactionMois(APIView):
+    """ /transaction/getmois/int:annee/int:mois/ """
+
+    def get_object(self, annee, mois):
+        try:
+            return TransactionProduit.objects.filter(
+                date__year = annee, date__month = mois, type = "vente")
+        except TransactionProduit.DoesNotExist:
+            raise Http404
+
+    def get(self, request, annee, mois, format = None):
+        transac = self.get_object(annee, mois)
+        serializer = TransactionProduitSerializer(transac, many = True)
+        return Response(serializer.data)
+
+class RedirectionTransactionJour(APIView):
+    """ /transaction/getjour/int:annee/int:mois/int:jour/ """
+
+    def get_object(self, annee, mois, jour):
+        try:
+            return TransactionProduit.objects.filter(
+                date__year = annee, date__month = mois, date__day = jour, type = "vente")
+        except TransactionProduit.DoesNotExist:
+            raise Http404
+
+    def get(self, request, annee, mois, jour, format = None):
+        transac = self.get_object(annee, mois, jour)
+        serializer = TransactionProduitSerializer(transac, many = True)
         return Response(serializer.data)
