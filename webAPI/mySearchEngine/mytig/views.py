@@ -1,13 +1,17 @@
 import requests
 from rest_framework.views import APIView
 from rest_framework.response import Response
+
 from mytig.config import baseUrl
 from mytig.models import ProduitEnPromotion
 from mytig.models import ProduitDisponible
 from mytig.serializers import ProduitEnPromotionSerializer
 from mytig.serializers import ProduitDisponibleSerializer
+
 from django.http import Http404
 from django.http import JsonResponse
+
+from rest_framework.permissions import IsAuthenticated
 
 # Create your views here.
 class RedirectionListeDeProduits(APIView):
@@ -111,3 +115,10 @@ class DispoDetail(APIView):
         response = requests.get(baseUrl + "product/" + str(serializer.data["tigID"]) + "/")
         jsondata = response.json()
         return Response(jsondata)
+
+class HelloView(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request):
+        content = {"message": "Hello World !"}
+        return Response(content)

@@ -2,6 +2,7 @@ from django.urls import path
 from mytig import views
 
 urlpatterns = [
+    path("hello/", views.HelloView.as_view()),
     path('products/', views.RedirectionListeDeProduits.as_view()),
     path('product/<int:pk>/', views.RedirectionDetailProduit.as_view()),
     path('onsaleproducts/', views.PromoList.as_view()),

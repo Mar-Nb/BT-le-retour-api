@@ -129,3 +129,10 @@ STATIC_URL = '/static/'
 CORS_ALLOWED_ORIGINS = [
   "http://localhost:4200"
 ]
+
+# JWT Authenticate
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ],
+}
