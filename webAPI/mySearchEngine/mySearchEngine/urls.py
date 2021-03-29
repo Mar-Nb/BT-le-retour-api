@@ -20,5 +20,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('mytig.urls')),
     path("", include("myImageBank.urls")),
-    path("", include("myShop.urls"))
+    path("", include("myShop.urls")),
+    path('', include('users.urls')),
+
 ]
